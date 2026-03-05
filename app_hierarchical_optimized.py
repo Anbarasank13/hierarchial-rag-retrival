@@ -525,8 +525,8 @@ Answer:
 <clear explanation>
 
 Citations:
-[Document: name, Section: X, Page: Y]
-"""    return PromptTemplate(template=tmpl, input_variables=["context", "question"])
+[Document: name, Section: X, Page: Y]"""    
+return PromptTemplate(template=tmpl, input_variables=["context", "question"])
 
 
 def build_context(docs) -> str:
