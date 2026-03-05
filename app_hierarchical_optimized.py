@@ -461,32 +461,72 @@ def get_chat_model(model_name: str, api_key: str):
         api_key=api_key
     )
 
-
 def _make_prompt(show_reasoning: bool) -> PromptTemplate:
     if show_reasoning:
-        tmpl = """Analyze the context and answer concisely with proper citations.
+        tmpl = """
+You are a legal document analysis assistant.
+
+Carefully analyze the provided context and answer the question using only the information found in the document.
 
 Context:
 {context}
 
-Question: {question}
+Question:
+{question}
+
+Instructions:
+- Read the entire context carefully before answering.
+- Identify relevant clauses, sections, or statements.
+- If multiple parts of the document contain relevant information, include them.
+- Do NOT guess or invent information that is not present.
+- Always cite the exact source location.
+
+Response format:
+
+Step-by-step reasoning:
+Explain how you located the answer from the context.
+
+Detailed Answer:
+Provide a complete explanation of the answer in clear sentences.
+
+Evidence / Citations:
+List all supporting citations in the format:
+[Document: <name>, Section: <section>, Page: <page number>]
+
+Key Entities (if applicable):
+- Parties
+- Payment amounts
+- Dates
+- Notice periods
+- Penalties
+
+Be thorough and clear. There is no strict word limit, but avoid unnecessary repetition.
+"""
+    else:
+        tmpl = """
+You are a legal document QA assistant.
+
+Answer the question using only the provided context.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Instructions:
+- Extract the exact information from the document.
+- Provide a detailed answer if the clause contains multiple details.
+- Include precise citations.
 
 Answer format:
-1. Brief reasoning (2-3 steps)
-2. Clear answer with citations [Doc: name, Section: X, Page: Y]
-3. Key entities if relevant
 
-Keep response under 300 words."""
-    else:
-        tmpl = """Based on the context, answer with specific citations.
+Answer:
+<clear explanation>
 
-Context:
-{context}
-
-Question: {question}
-
-Answer with citations [Doc, Section, Page]."""
-    return PromptTemplate(template=tmpl, input_variables=["context", "question"])
+Citations:
+[Document: name, Section: X, Page: Y]
+"""    return PromptTemplate(template=tmpl, input_variables=["context", "question"])
 
 
 def build_context(docs) -> str:
