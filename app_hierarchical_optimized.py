@@ -460,7 +460,6 @@ def get_chat_model(model_name: str, api_key: str):
         temperature=0.1,
         api_key=api_key
     )
-from langchain.prompts import PromptTemplate
 
 def _make_prompt(show_reasoning: bool) -> PromptTemplate:
     if show_reasoning:
