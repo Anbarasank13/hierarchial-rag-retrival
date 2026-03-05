@@ -460,6 +460,7 @@ def get_chat_model(model_name: str, api_key: str):
         temperature=0.1,
         api_key=api_key
     )
+from langchain.prompts import PromptTemplate
 
 def _make_prompt(show_reasoning: bool) -> PromptTemplate:
     if show_reasoning:
@@ -525,9 +526,13 @@ Answer:
 <clear explanation>
 
 Citations:
-[Document: name, Section: X, Page: Y]"""    
-return PromptTemplate(template=tmpl, input_variables=["context", "question"])
+[Document: name, Section: X, Page: Y]
+"""
 
+    return PromptTemplate(
+        template=tmpl,
+        input_variables=["context", "question"]
+    )
 
 def build_context(docs) -> str:
     return "\n---\n".join(
